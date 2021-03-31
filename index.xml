@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>A Trillion Neurons</title>
+    <link>https://ivanritter.github.io/blog/</link>
+    <description>Recent content on A Trillion Neurons</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 27 Mar 2021 03:45:00 +0100</lastBuildDate>
+    
+	<atom:link href="https://ivanritter.github.io/blog/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Sentiment analysis using LSTM</title>
+      <link>https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/</link>
+      <pubDate>Sat, 27 Mar 2021 03:45:00 +0100</pubDate>
+      
+      <guid>https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/</guid>
+      <description>Sentiment analysis is a technique used to determine whether data has a positive, negative or neutral sentiment. A company might analyse a variety of tweets to find out if its new shoe is well received. Somebody who worked in the car industry once told me, that either positive or negative reviews for a new car are fine. The worst than could happen is that people do not show any interest at all.</description>
+    </item>
+    
+    <item>
+      <title>About me</title>
+      <link>https://ivanritter.github.io/blog/about/</link>
+      <pubDate>Tue, 14 Apr 2015 22:17:00 +0000</pubDate>
+      
+      <guid>https://ivanritter.github.io/blog/about/</guid>
+      <description>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Yow !</description>
+    </item>
+    
+  </channel>
+</rss>

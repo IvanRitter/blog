@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en-us">
+<head>
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    
+    
+        
+        <meta name="twitter:card" content="summary_large_image"/>
+        <meta name="twitter:image" content="/blog/images/low_poly2.svg"/>
+    
+
+
+
+<meta name="twitter:title" content="Sentiment analysis using LSTM"/>
+<meta name="twitter:description" content="In this post we build a RNN using LSTM in Pytorch. It further will be used to classify the sentiment of amazon customer reviews. The code corresponding to this post can be found in my github. You should have basic knowledge about deep learning to fully understand the post "/>
+<meta name="twitter:site" content="@"/>
+
+
+
+  	<meta property="og:title" content="Sentiment analysis using LSTM &middot; A Trillion Neurons" />
+  	<meta property="og:site_name" content="A Trillion Neurons" />
+  	<meta property="og:url" content="https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/" />
+
+    
+       <meta property="og:image" content="/blog/images/low_poly2.svg"/>
+    
+
+    
+    <meta property="og:description" content="In this post we build a RNN using LSTM in Pytorch. It further will be used to classify the sentiment of amazon customer reviews. The code corresponding to this post can be found in my github. You should have basic knowledge about deep learning to fully understand the post " />
+  	<meta property="og:type" content="article" />
+    <meta property="article:published_time" content="2021-03-27T03:45:00&#43;01:00" />
+
+    
+    <meta property="article:tag" content="Python" />
+    
+    <meta property="article:tag" content="PyTorch" />
+    
+    <meta property="article:tag" content="LSTM" />
+    
+    <meta property="article:tag" content="amazon reviews" />
+    
+    
+
+    <title>Sentiment analysis using LSTM &middot; A Trillion Neurons</title>
+
+    
+    <meta name="description" content="In this post we build a RNN using LSTM in Pytorch. It further will be used to classify the sentiment of amazon customer reviews. The code corresponding to this post can be found in my github. You should have basic knowledge about deep learning to fully understand the post " />
+    
+
+    <meta name="HandheldFriendly" content="True" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="shortcut icon" href="/blog/images/favicon.ico">
+	  <link rel="apple-touch-icon" href="/blog/images/apple-touch-icon.png" />
+
+    <link rel="stylesheet" type="text/css" href="/blog/css/screen.css" />
+    <link rel="stylesheet" type="text/css" href="/blog/css/nav.css" />
+
+    
+
+    
+
+    
+      
+          <link href="/blog/index.xml" rel="alternate" type="application/rss+xml" title="A Trillion Neurons" />
+      
+      
+    
+    <meta name="generator" content="Hugo 0.57.2" />
+
+    <link rel="canonical" href="https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/" />
+
+    
+      
+    
+    <script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "publisher": {
+        "@type": "Organization",
+        "name":  null 
+    },
+    "author": {
+        "@type": "Person",
+        "name":  null ,
+        
+        "url":  null ,
+        "sameAs": [
+            
+            
+             
+             
+             
+             
+             
+            
+        ],
+        "description": "Engineer and ML enthusiast."
+        
+    },
+    "headline": "Sentiment analysis using LSTM",
+    "name": "Sentiment analysis using LSTM",
+    "wordCount":  2895 ,
+    "timeRequired": "PT14M",
+    "inLanguage": {
+      "@type": "Language",
+      "alternateName": "en"
+    },
+    "url": "https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/",
+    "datePublished": "2021-03-27T03:45Z",
+    "dateModified": "2021-03-27T03:45Z",
+    
+    "image": {
+        "@type": "ImageObject",
+        "url": "https://ivanritter.github.io/blog//images/low_poly2.svg",
+        "width": 3000,
+        "height": 1445
+    },
+    
+    "keywords": "Python, PyTorch, LSTM, amazon reviews",
+    "description": "In this post we build a RNN using LSTM in Pytorch. It further will be used to classify the sentiment of amazon customer reviews. The code corresponding to this post can be found in my github. You should have basic knowledge about deep learning to fully understand the post ",
+    "mainEntityOfPage": {
+        "@type": "WebPage",
+        "@id": "https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/"
+    }
+}
+    </script>
+    
+
+
+    
+
+    
+
+    
+</head>
+<body class="nav-closed">
+
+  <div class="nav">
+    <h3 class="nav-title">Menu</h3>
+    <a href="#" class="nav-close">
+        <span class="hidden">Close</span>
+    </a>
+    <ul>
+        
+        
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/blog/about/">About me</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="https://github.com/IvanRitter">Github repos</a>
+            </li>
+        
+            
+            <li class="nav-opened" role="presentation">
+            	<a href="/blog/">Blog</a>
+            </li>
+        
+        
+    </ul>
+
+    
+</div>
+<span class="nav-cover"></span>
+
+
+ <div class="site-wrapper">
+
+
+
+  
+  <header class="main-header post-head" style="background-image: url(/blog/images/low_poly2.svg)">
+  
+  <nav class="main-nav overlay clearfix">
+
+
+  
+  
+      <a class="menu-button" href="#"><span class="burger">&#9776;</span><span class="word">Menu</span></a>
+  
+  </nav>
+</header>
+
+
+
+<main class="content" role="main">
+
+
+
+
+  <article class="post post">
+
+    <header class="post-header">
+        <h1 class="post-title">Sentiment analysis using LSTM</h1>
+        <small>In this post we build a RNN using LSTM in Pytorch. It further will be used to classify the sentiment of amazon customer reviews. The code corresponding to this post can be found in my github. You should have basic knowledge about deep learning to fully understand the post </small>
+
+        <section class="post-meta">
+        
+          <time class="post-date" datetime="2021-03-27T03:45:00&#43;01:00">
+            Mar 27, 2021
+          </time>
+        
+         
+          <span class="post-tag small"><a href="https://ivanritter.github.io/blog//tags/python/">#Python</a></span>
+         
+          <span class="post-tag small"><a href="https://ivanritter.github.io/blog//tags/pytorch/">#PyTorch</a></span>
+         
+          <span class="post-tag small"><a href="https://ivanritter.github.io/blog//tags/lstm/">#LSTM</a></span>
+         
+          <span class="post-tag small"><a href="https://ivanritter.github.io/blog//tags/amazon-reviews/">#amazon reviews</a></span>
+         
+        </section>
+    </header>
+
+    <section class="post-content">
+      
+
+<p>Sentiment analysis is a technique used to determine whether data has a positive, negative or neutral sentiment. A company might analyse a variety of tweets to find out if its new shoe is well received. Somebody who worked in the car industry once told me, that either positive or negative reviews for a new car are fine. The worst than could happen is that people do not show any interest at all. I keep it for you to decide if that is actually true.</p>
+
+<p>In this post we will perform sentiment analysis on product reviews written by  customers. Reviews are suitable for sentiment analysis, because they normally reflect a clear opinion about something. A platform that daily generates new reviews is amazon. However, amazon discourages data scraping in its policy. Luckily, amazon provides several data sets of customer reviews of different product categories. All data sets can be found <a href="https://s3.amazonaws.com/amazon-reviews-pds/tsv/index.txt">here</a>. For our analysis we will use the customer reviews of electronics which can be found <a href="https://s3.amazonaws.com/amazon-reviews-pds/tsv/amazon_reviews_us_Electronics_v1_00.tsv.gz">here</a>.</p>
+
+<h4 id="data-exploration">Data exploration</h4>
+
+<p>Before we build our model and train it on the data we examine it first. This is important, because even the best model will not shine if it is fed poor data. For the exploration we will use <a href="https://pandas.pydata.org/">pandas</a>. For each review in the dataset different information is provided. We are only interested in the star rating and the corresponding review text. The rest of the information is ignored, because we like to estimate the sentiment solely on the review text. Depending on the application it is a good choice to consider all data.</p>
+
+<p>We start by looking at the star rating. A histogram of the rating can be seen in the plot below.</p>
+
+<p><img src="/blog/content/sentiment_analysis_lstm/amazon_review_1.svg" alt="amazon_data_1" /></p>
+
+<p>It can be seen that a major portion of the customers has decided to give a five star rating in their review. This is a good thing for amazon, but might lead towards a bias in our trained model. For our analysis we will make the assumption that a review is either positive or negative. Therefore,  we formulate the analysis as a binary classification problem. The first class is denoted as <em>0</em> or <em>negative</em> and contains all reviews with three or less stars. The other class is denoted as <em>1</em> or positive and contains the remaining reviews. To reduce class imbalance and computation time, we sample a new data set from the data set. The star rating histogram of the new data set can be seen in the plot below.</p>
+
+<p><img src="/blog/content/sentiment_analysis_lstm/amazon_review_2.svg" alt="amazon_data_2" /></p>
+
+<h4 id="data-preprocessing">Data preprocessing</h4>
+
+<p>The next step is to preprocess the data. There are several different preprocessing techniques we can make use of. Each task has its tools. Some preprocessing steps are beneficial for analysis, others are not. So, one has to make a reasonable choice on how to preprocess the data. For our analysis we will take the following steps:</p>
+
+<ul>
+<li>Remove empty or invalid reviews
+
+<ul>
+<li>If a review consists only of a star rating without text, there is no need to analyse it.</li>
+<li>We also remove a review if someone has written the actual star rating into the review text for the same reason.</li>
+</ul></li>
+<li>Remove noise
+
+<ul>
+<li>Text obtained from sources like books or newspapers usually undergoes quality control. Reviews like ours usually do not undergo such control and therefore are noisy. They will contain typographical errors and smileys, among other things. These can interfere with our analysis, which gives us enough reason to remove them.</li>
+</ul></li>
+
+<li><p>Remove punctuation</p>
+
+<ul>
+<li>We remove punctuation <code>!&quot;#$%&amp;\'()*+,-./:;&lt;=&gt;?@[\\]^_`{|}~</code> .</li>
+</ul></li>
+
+<li><p>Remove stop words</p>
+
+<ul>
+<li>Stop words usually have a high frequency, but do not contribute much information. Removing them can decrease the computational effort. We should choose an appropriate set of stop words we will remove. Some for example consider <em>not</em> as a stop word. Keep in mind <em>&ldquo;I do recommend the product&rdquo;</em> and <em>&ldquo;I do not recommend the product&rdquo;</em> have an opposite meaning.</li>
+</ul></li>
+
+<li><p>Tokenize words</p>
+
+<ul>
+<li>Usually the reviews are written in whole sentences. Instead of processing the reviews sentencewise we process them wordwise. To do so, we have to split each sentence into the words that make it up. In natural language processing words are also called <em>unigrams</em>.</li>
+</ul></li>
+
+<li><p>Change to lower case</p>
+
+<ul>
+<li>In the German language all nouns are capitalized. With some exceptions, all words in the English language are written in lower case. Setting all words in lower case will not interfere with our analysis, but can reduce the amount of words to consider. Otherwise, we have to consider Book, book and BOOK as separate words. Except the increased computation effort, our model would have to learn that these words have the same meaning.</li>
+</ul></li>
+</ul>
+
+<h4 id="data-encoding">Data Encoding</h4>
+
+<p>After performing these steps a crucial step is left before we can start building our model. While letters are designed to be read by humans, computers are designed to work with numbers. To allow our model to work with our reviews, we have to translate them in a reasonable way.
+One option is to use <em>one-hot</em> encoding. In this case each word will be represented as a vector of size <em>n</em>, where <em>n</em> is the number of unique words in our reviews. So, for each word one certain entry will be equal to one and all other will be equal to zero. One downside of this approach is the high memory consumption. Another is that based on this encoding there is no relation between the words. Each word has the same <em>Hamming</em>-distance of one to all other words.</p>
+
+<p>A different approach is to use word embeddings. In short, each word will be associated with some dense high-dimensional vector of size <em>m</em>, where <em>m</em> is a hyper parameter. The entries of the vectors are real numbers. The major difference is that we learn the vector representation of each word. This has two benefits. First, we hopefully learn a representation in which associated words have close vectors. This closeness could be measured using the scalar product between vectors. Second, it allows us to encode the words using smaller vectors <em>m</em> &lt; <em>n</em>. Word embeddings are a broad topic. For an overview have a look at this blog post <a href="https://lilianweng.github.io/lil-log/2017/10/15/learning-word-embedding.html">here</a>. We do not intend to reuse our embeddings for another project. Therefore, we train our model and learn the embeddings simultaneously.</p>
+
+<h4 id="build-our-model">Build our model</h4>
+
+<p>Now that we have prepared the data and decided on how we encode them, we can proceeded to the model we will use. Our data is sequential. That means that the order of the words matters, because the current word will usually depend on the previous words. Due to this, a reasonable approach should be chosen which can account for this. One technique used with such data is to use recurrent neuronal networks (RNN). RNNs have a so called hidden state which can account for previous input. It is provided to the network in each time step with the current input. They also have the advantage that they can handle variable input size. This is necessary, due to sentences usually having different length. For more information on RNNs I recommend to have a look at <a href="https://www.deeplearningbook.org/contents/rnn.html">this</a> chapter from the book <em>Deep Learning</em>. For those who prefer lectures try <a href="https://www.youtube.com/watch?v=ym5qG-3kJ10">this</a> video series on RNNs.</p>
+
+<p>While in theory RNNs are a suitable architecture for our data, training them can be difficult. We consider two problems occurring in this context. One is the so called <em>exploding gradient</em>. As the name says, it leads to huge gradients which make the training unstable. It has a similar effect to choosing an inappropriate learning rate. We handle this problem by clipping the gradients if their norm exceeds a predefined value. Another problem is the <em>vanishing gradient</em> problem. It is somehow the opposite of the exploding gradient. Gradients become too small for our model to be trained. To my knowledge, this problem is currently not completely solved. One way to improve it is to use long short-term memory (LSTM). Using LSTM has other benefits besides improving on the vanishing gradient problem. It allows for long term dependencies to be learned where RNNs without <em>LSTM</em> have difficulties. If you like to learn more on LSTM have a look at the blog post found <a href="http://colah.github.io/posts/2015-08-Understanding-LSTMs/">here</a>.</p>
+
+<p>For the core of our model we will use the <em>LSTM</em> that comes with <em>PyTorch</em>. <em>PyTorch</em> also allows to stack LSTM with ease, so that the output of one <em>LSTM</em> is the input to another <em>LSTM</em>. Below you can see the code for our model. We use three linear layers with a <em>ReLU</em> activation for the first two. Due to performing binary classification, we set the output size of our output layer to two and use a <em>LogSoftmax</em> to obtain log probabilities. To reduce overfitting we use dropout in the first two linear layers with a dropout probability of 0.2. The function init_hidden() initializes the hidden state and the cell state of our model with zeros. The hidden state and the cell state both have to be initialized for each review processed. I also have seen that others initialize both randomly instead of setting them to zeros.</p>
+
+<pre><code class="language-python">class LSTM(torch.nn.Module):
+    def __init__(self,input_dim,hidden_dim,output_dim,batch_size,n_layer,embedding_dim):
+        super().__init__()
+        self.input_dim = input_dim
+        self.output_dim = output_dim
+        self.hidden_dim = hidden_dim
+        self.batch_size = batch_size
+        self.n_layer = n_layer
+        self.embedding_dim = embedding_dim
+
+        self.dropout = torch.nn.Dropout(p=0.2)
+        self.embedding = torch.nn.Embedding(embedding_dim,input_dim,padding_idx=0)
+        self.lstm = torch.nn.LSTM(input_dim,hidden_dim,num_layers=n_layer)
+        self.linear1 = torch.nn.Linear(hidden_dim,hidden_dim*2)
+        self.linear2 = torch.nn.Linear(hidden_dim*2,int(hidden_dim*(1/3)))
+        self.linear3 = torch.nn.Linear(int(hidden_dim*(1/3)),2)
+        self.relu    = torch.nn.ReLU()
+        self.log_softmax = torch.nn.LogSoftmax(dim=1)
+
+    def init_hidden(self):
+        hidden = torch.zeros(self.n_layer,self.batch_size,self.hidden_dim)
+        cell = torch.zeros(self.n_layer,self.batch_size,self.hidden_dim)
+        return (hidden,cell)
+        
+    def forward(self,input_data,hidden):
+        out,(hidden,cell) = self.lstm(input_data,hidden)
+        out = self.dropout(hidden[-1])
+        out = self.relu(self.linear1(out))
+        out = self.dropout(out)
+        out = self.linear2(out)
+        out = self.relu(out)
+        out = self.linear3(out)
+        return self.log_softmax(out)
+</code></pre>
+
+<h4 id="training-our-model">Training our model</h4>
+
+<p>Before we train our model we split the data into proper subsets for training, testing and validation. The set for training contains  80% of the data and the other two 10% each.</p>
+
+<p>One important detail is how we provide the input to our model. As said before, we like the model to learn the word embeddings while we train the model. For this we use the <em>Embedding</em> that comes with <em>PyTorch</em>. In the documentation it says</p>
+
+<blockquote>
+<p>A simple lookup table that stores embeddings of a fixed dictionary and size.</p>
+
+<p>This module is often used to store word embeddings and retrieve them using indices. The input to the module is a list of indices, and the output is the corresponding word embeddings.</p>
+</blockquote>
+
+<p>Consequently, we can provide it an index and obtain the corresponding word embedding. For this to work we have to assign a unique integer to each word to associate it with a certain embedding. So, before we can start the training we find all unique words and assign an integer to each one. An easy way to encode words is to use a dictionary. In the following we will provide a list of indices to the embedding and obtain a matrix with word embeddings. The word embeddings are learned on their own during the model training with gradient descent.</p>
+
+<p>Another important detail is the use of mini batches. Some people write a lot in their reviews and other keep it short. This results in a variable length of the text reviews. Tensors are fixed in each dimension and not intended to be used with data of variable length. One approach is to set a fixed review length and cut off the review if it exceeds this length. If it is too short we can pad it with zeros. While this approach is valid it is not ideal. For this, PyTorch provides a much more elegant way to do this. It provides the functions pad_sequence() and pack_padded_sequence(). The first allows to pad all reviews to the same length, which allows us to store mini batches comfortably in a tensor. Depending on the data this can lead to a lot of zeros in the data and hence to several unnecessary computations. The function pack_padded_sequences() brings the data into a format that is accepted by the LSTM in PyTorch and allows PyTorch to account for the zeros.</p>
+
+<p>Our model outputs log probabilities. Since we perform a classification we can use the negative log likelihood loss as loss function for training. For the optimization the Adam optimizer is used. The gradients are clipped if the Euclidean norm of the gradients exceeds five.</p>
+
+<p><strong>If you train the model on your CPU  it will take a substantial amount of time. I would recommend training it on a GPU if you can. In case you have no GPU you can try using <a href="https://colab.research.google.com/">
+Google Colab</a> like I did.</strong></p>
+
+<h4 id="results">Results</h4>
+
+<p>In the following we will evaluate the result achieved with the trained model. Here is an overview of the model and training parameters.</p>
+
+<table>
+<thead>
+<tr>
+<th></th>
+<th></th>
+</tr>
+</thead>
+
+<tbody>
+<tr>
+<td>dim word embeddings</td>
+<td>50</td>
+</tr>
+
+<tr>
+<td>size of hidden and cell state</td>
+<td>500</td>
+</tr>
+
+<tr>
+<td>dim first hidden layer</td>
+<td>500 x 1000</td>
+</tr>
+
+<tr>
+<td>dim first hidden layer</td>
+<td>1000 x 166</td>
+</tr>
+
+<tr>
+<td>dim first hidden layer</td>
+<td>166 x 2</td>
+</tr>
+
+<tr>
+<td>batch size</td>
+<td>64</td>
+</tr>
+
+<tr>
+<td>learning rate</td>
+<td>0.005</td>
+</tr>
+
+<tr>
+<td>number of stacked LSMT</td>
+<td>2</td>
+</tr>
+
+<tr>
+<td>P_dropout</td>
+<td>0.2</td>
+</tr>
+
+<tr>
+<td>iterations of training</td>
+<td>2</td>
+</tr>
+</tbody>
+</table>
+
+<p>To avoid overfitting a validation set is used. The training loss and the classification rate achieved on the validation set are recorded for every 100 processed batches. Both can be seen in the plot below.</p>
+
+<p><img src="/blog/content/sentiment_analysis_lstm/loss_tr_val.svg" alt="loss_train_val" /></p>
+
+<p>In the performed case, training the model for two iterations is sufficient to achieve reasonable results. Using the trained model allows to achieve a classification rate of 84.47% on the used test data. Let us try to come up with some reviews on our own and see if it can classify them correctly. At first we try the following positive review &ldquo;Our dog enjoys breakfast with the new toaster&rdquo;. This review was correctly classified as positive. Now, let us try a negative one &ldquo;My friend was not as excited as promised&rdquo;. This review was classified as negative like we intended.</p>
+
+<p>While our two examples are classified correctly, on the test set <sup>1</sup>&frasl;<sub>7</sub> of all reviews are misclassified. So, let us examine the misclassified reviews and  try to get some insight. First, we find out how well the reviews with each particular star rating were classified. In the plot below you can see the classification rate on the test data for reviews with different star rating.</p>
+
+<p><img src="/blog/content/sentiment_analysis_lstm/correct_classification.svg" alt="portion" /></p>
+
+<p>We observe that the best classification rate is achieved on reviews with the most extreme star ratings. This is not surprising. In general the more a data point tends towards one side, the more confident we can be that it belongs to the class corresponding to this site. In our case we put the decision boarder between three and four stars. In the plot below, we can see how the misclassification of reviews with a certain rating contributes to the overall misclassifications.</p>
+
+<p><img src="/blog/content/sentiment_analysis_lstm/portion_total.svg" alt="portion" /></p>
+
+<p>As expected the reviews with three and four stars contribute the most to the misclassifications. The problem with reviews is that they are written by many different people. The author of a review has to decide for a star rating and a review text which hopefully explains why a certain rating is given. To choose between a three and a four star rating is much harder than choosing between a one star and a five star rating. Consider the following example</p>
+
+<blockquote>
+<p>&ldquo;work not well least not minecraft fine movies though&rdquo;.</p>
+</blockquote>
+
+<p>This is one of the reviews from the data. Based on this review I personally would have said that it is a negative review, because the author clearly says that it does not work well. The model also classified it as negative. To my surprise the corresponding star rating is four stars, which I consider as good rating. Another example is the following</p>
+
+<blockquote>
+<p>&ldquo;seem okay big ears aware large size eargels&rdquo;.</p>
+</blockquote>
+
+<p>The model classified it as positive but the rating was only three stars. These examples are not representative, but show that it is hard to put some reviews in one of the categories. To improve we could try using more data. Another approach can be to use the over data that comes with each review. Using this additional information could allow to increase the classification rate.</p>
+
+<p>While looking at the misclassified examples I recognized that many of them are relatively long. The average character number of a review text in the test set is 262.23 characters, while the average character size of the misclassified review texts is 321.48 characters. So, the misclassified review texts are 18.43% longer than the average review text in the test set. This indicates that our model tends to misclassify reviews with longer text. I assume that a brief and on the point review is easier to classify as one which is beating around the bush.</p>
+
+<h4 id="closing-words">Closing words</h4>
+
+<p>We have covered the process from preprocessing the data to a working trained model. On the test data our model achieves a classification rate of around 85%. While this is a nice result, there is room for further improvement. From here, different things could be tried. For example, more data can be used to train the model or additional information can be provided to the model. The reviews come with information like a headline or the number of people who found this review useful. I assume that somebody will find a review helpful if it states a clear position about the product.  Further, the hyperparameters of the model could be optimized or the architecture itself can be modified. Another approach is to use an ensemble classifier. The idea is to combine several models to build a more accurate model. Two common techniques are boosting and bagging, but this is a topic for another post. See you around.</p>
+
+    </section>
+
+
+  <footer class="post-footer">
+
+
+    
+    <div align="middle">
+    <a href="/blog" >back to overview</a>
+    </div>
+    
+
+
+    
+
+
+
+
+    
+
+
+    
+
+
+
+
+
+
+
+  </footer>
+</article>
+
+</main>
+
+
+  <aside class="read-next">
+  
+  
+</aside>
+
+
+
+    <footer class="site-footer clearfix">
+        <section class="copyright"><a href="">A Trillion Neurons</a> </section>
+        
+    </footer>
+    </div>
+    <script type="text/javascript" src="/blog/js/jquery.js"></script>
+    <script type="text/javascript" src="/blog/js/jquery.fitvids.js"></script>
+    <script type="text/javascript" src="/blog/js/index.js"></script>
+    
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+<script>
+  if (window.netlifyIdentity) {
+    window.netlifyIdentity.on("init", user => {
+      if (!user) {
+        window.netlifyIdentity.on("login", () => {
+          document.location.href = "/admin/";
+        });
+      }
+    });
+  }
+</script>
+    
+</body>
+</html>
+

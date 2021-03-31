@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>amazon reviews on A Trillion Neurons</title>
+    <link>https://ivanritter.github.io/blog/tags/amazon-reviews/</link>
+    <description>Recent content in amazon reviews on A Trillion Neurons</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Sat, 27 Mar 2021 03:45:00 +0100</lastBuildDate>
+    
+	<atom:link href="https://ivanritter.github.io/blog/tags/amazon-reviews/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Sentiment analysis using LSTM</title>
+      <link>https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/</link>
+      <pubDate>Sat, 27 Mar 2021 03:45:00 +0100</pubDate>
+      
+      <guid>https://ivanritter.github.io/blog/sentiment_analysis_using_lstm/</guid>
+      <description>Sentiment analysis is a technique used to determine whether data has a positive, negative or neutral sentiment. A company might analyse a variety of tweets to find out if its new shoe is well received. Somebody who worked in the car industry once told me, that either positive or negative reviews for a new car are fine. The worst than could happen is that people do not show any interest at all.</description>
+    </item>
+    
+  </channel>
+</rss>
